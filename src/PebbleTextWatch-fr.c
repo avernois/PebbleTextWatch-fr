@@ -5,7 +5,7 @@
 
 #define MY_UUID { 0xFF, 0x9E, 0x5C, 0xAC, 0xBA, 0x01, 0x4A, 0xE5, 0x85, 0x4D, 0xA9, 0x86, 0x16, 0xCE, 0x02, 0xED }
 PBL_APP_INFO(MY_UUID,
-             "Template App", "Your Company",
+             "Simple Text Watch in french", "Crafting Labs",
              1, 0, /* App version */
              DEFAULT_MENU_ICON,
              APP_INFO_STANDARD_APP);
