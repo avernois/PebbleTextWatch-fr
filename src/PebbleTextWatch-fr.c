@@ -12,8 +12,26 @@ PBL_APP_INFO(MY_UUID,
 
 Window window;
 TextLayer time_layer;
+TextLayer hour_layer;
 
 PblTm t;
+
+
+static const char* const HOURS[] = {
+  "minuit",
+  "un",
+  "deux",
+  "trois",
+  "quatre",
+  "cinq",
+  "six",
+  "sept",
+  "huit",
+  "neuf",
+  "dix",
+  "onze",
+  "midi"
+};
 
 void display_time(PblTm *t)
 { 
@@ -21,6 +39,7 @@ void display_time(PblTm *t)
   static char time_text[6] = "00:00";
   string_format_time(time_text, sizeof(time_text), "%R", t);
   text_layer_set_text(&time_layer, time_text);
+  text_layer_set_text(&hour_layer, HOURS[t->tm_hour % 12]);
 }
 
 void handle_init(AppContextRef ctx) {
@@ -29,18 +48,27 @@ void handle_init(AppContextRef ctx) {
   window_stack_push(&window, true /* Animated */);
   window_set_background_color(&window, GColorBlack);
 
+  text_layer_init(&hour_layer, GRect(0, 0, 144, 50));
+  text_layer_set_font(&hour_layer, fonts_get_system_font(FONT_KEY_BITHAM_42_LIGHT));
+  text_layer_set_text_color(&hour_layer, GColorWhite);
+  text_layer_set_background_color(&hour_layer, GColorClear);
+  text_layer_set_text_alignment(&hour_layer, GTextAlignmentLeft);
+
   text_layer_init(&time_layer, GRect(0, 65, 144, 30));
   text_layer_set_font(&time_layer, fonts_get_system_font(FONT_KEY_BITHAM_42_LIGHT));
   text_layer_set_text_color(&time_layer, GColorWhite);
   text_layer_set_background_color(&time_layer, GColorClear);
-  text_layer_set_text_alignment(&time_layer, GTextAlignmentLeft);
+  text_layer_set_text_alignment(&time_layer, GTextAlignmentCenter);
 
   get_time(&t);
   display_time(&t);
   
-  text_layer_set_text_alignment(&time_layer, GTextAlignmentCenter);
+  
+  text_layer_set_font(&hour_layer, fonts_get_system_font(FONT_KEY_ROBOTO_CONDENSED_21));
   text_layer_set_font(&time_layer, fonts_get_system_font(FONT_KEY_ROBOTO_CONDENSED_21));
+  
   layer_add_child(&window.layer, &time_layer.layer);
+  layer_insert_above_sibling(&hour_layer.layer, &time_layer.layer);
 }
 
 void handle_minute_tick(AppContextRef ctx, PebbleTickEvent *t) {
