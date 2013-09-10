@@ -13,6 +13,7 @@ PBL_APP_INFO(MY_UUID,
 Window window;
 TextLayer time_layer;
 TextLayer hour_layer;
+TextLayer minute_layer;
 
 PblTm t;
 
@@ -33,6 +34,15 @@ static const char* const HOURS[] = {
   "midi"
 };
 
+static const char* const MINUTES[] = {
+  "",          "un",              "deux",           "trois",          "quatre",           "cinq",           "six",           "sept",           "huit",           "neuf",
+  "dix",       "onze",            "douze",          "treize",         "quatorze",         "quinze",         "seize",         "dix-sept",       "dix-huit",       "dix-neuf",
+  "vingt",     "vingt-et-un",     "ving-deux",      "vingt-trois",    "vingt-quatre",     "vingt-cinq",     "vingt-six",     "vingt-sept",     "vingt-huit",     "vingt-neuf",
+  "trente",    "trente-et-un",    "trente-deux",    "trente-trois",   "trente-quatre",    "trente-cinq",    "trente-six",    "trente-sept",    "trente-huit",    "trente-neuf",
+  "quarante",  "quarante-et-un",  "quarante-deux",  "quarante-trois", "quarante-quatre",  "quarante-cinq",  "quarante-six",  "quarante-sept",  "quarante-huit",  "quarante-neuf",
+  "cinquante", "cinquante-et-un", "cinquante-deux", "cinquante-trois","cinquante-quatre", "cinquante-cinq", "cinquante-six", "cinquante-sept", "cinquante-huit", "cinquante-neuf"
+};
+
 void display_time(PblTm *t)
 { 
   // Need to be static because they're used by the system later.
@@ -40,6 +50,7 @@ void display_time(PblTm *t)
   string_format_time(time_text, sizeof(time_text), "%R", t);
   text_layer_set_text(&time_layer, time_text);
   text_layer_set_text(&hour_layer, HOURS[t->tm_hour % 12]);
+  text_layer_set_text(&minute_layer, MINUTES[t->tm_min]);
 }
 
 void handle_init(AppContextRef ctx) {
@@ -48,27 +59,34 @@ void handle_init(AppContextRef ctx) {
   window_stack_push(&window, true /* Animated */);
   window_set_background_color(&window, GColorBlack);
 
-  text_layer_init(&hour_layer, GRect(0, 0, 144, 50));
-  text_layer_set_font(&hour_layer, fonts_get_system_font(FONT_KEY_BITHAM_42_LIGHT));
+  text_layer_init(&hour_layer, GRect(0, 0, 144, 25));
   text_layer_set_text_color(&hour_layer, GColorWhite);
   text_layer_set_background_color(&hour_layer, GColorClear);
   text_layer_set_text_alignment(&hour_layer, GTextAlignmentLeft);
+  text_layer_init(&minute_layer, GRect(0, 25, 144, 50));
+  text_layer_set_text_color(&minute_layer, GColorWhite);
+  text_layer_set_background_color(&minute_layer, GColorClear);
+  text_layer_set_text_alignment(&minute_layer, GTextAlignmentLeft);
+
+
 
   text_layer_init(&time_layer, GRect(0, 65, 144, 30));
-  text_layer_set_font(&time_layer, fonts_get_system_font(FONT_KEY_BITHAM_42_LIGHT));
   text_layer_set_text_color(&time_layer, GColorWhite);
   text_layer_set_background_color(&time_layer, GColorClear);
   text_layer_set_text_alignment(&time_layer, GTextAlignmentCenter);
-
-  get_time(&t);
-  display_time(&t);
   
   
   text_layer_set_font(&hour_layer, fonts_get_system_font(FONT_KEY_ROBOTO_CONDENSED_21));
+  text_layer_set_font(&minute_layer, fonts_get_system_font(FONT_KEY_ROBOTO_CONDENSED_21));  
   text_layer_set_font(&time_layer, fonts_get_system_font(FONT_KEY_ROBOTO_CONDENSED_21));
   
   layer_add_child(&window.layer, &time_layer.layer);
-  layer_insert_above_sibling(&hour_layer.layer, &time_layer.layer);
+  layer_add_child(&window.layer, &hour_layer.layer);
+  layer_add_child(&window.layer, &minute_layer.layer);
+  
+
+  get_time(&t);
+  display_time(&t);
 }
 
 void handle_minute_tick(AppContextRef ctx, PebbleTickEvent *t) {
