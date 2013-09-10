@@ -13,6 +13,7 @@ PBL_APP_INFO(MY_UUID,
 Window window;
 TextLayer time_layer;
 TextLayer hour_layer;
+TextLayer text_layer;
 TextLayer minute_layer;
 
 PblTm t;
@@ -51,6 +52,11 @@ void display_time(PblTm *t)
   text_layer_set_text(&time_layer, time_text);
   text_layer_set_text(&hour_layer, HOURS[t->tm_hour % 12]);
   text_layer_set_text(&minute_layer, MINUTES[t->tm_min]);
+  if(t->tm_hour > 1) {
+    text_layer_set_text(&text_layer, "heures");
+  } else {
+    text_layer_set_text(&text_layer, "heure");
+  }
 }
 
 void handle_init(AppContextRef ctx) {
@@ -63,25 +69,31 @@ void handle_init(AppContextRef ctx) {
   text_layer_set_text_color(&hour_layer, GColorWhite);
   text_layer_set_background_color(&hour_layer, GColorClear);
   text_layer_set_text_alignment(&hour_layer, GTextAlignmentLeft);
-  text_layer_init(&minute_layer, GRect(0, 25, 144, 50));
+  text_layer_set_font(&hour_layer, fonts_get_system_font(FONT_KEY_ROBOTO_CONDENSED_21));
+
+  text_layer_init(&text_layer, GRect(0, 25, 144, 25));
+  text_layer_set_text_color(&text_layer, GColorWhite);
+  text_layer_set_background_color(&text_layer, GColorClear);
+  text_layer_set_text_alignment(&text_layer, GTextAlignmentLeft);
+  text_layer_set_font(&text_layer, fonts_get_system_font(FONT_KEY_ROBOTO_CONDENSED_21));
+  
+
+  text_layer_init(&minute_layer, GRect(0, 50, 144, 50));
   text_layer_set_text_color(&minute_layer, GColorWhite);
   text_layer_set_background_color(&minute_layer, GColorClear);
   text_layer_set_text_alignment(&minute_layer, GTextAlignmentLeft);
+  text_layer_set_font(&minute_layer, fonts_get_system_font(FONT_KEY_ROBOTO_CONDENSED_21));  
 
 
-
-  text_layer_init(&time_layer, GRect(0, 65, 144, 30));
+  text_layer_init(&time_layer, GRect(0, 125, 144, 30));
   text_layer_set_text_color(&time_layer, GColorWhite);
   text_layer_set_background_color(&time_layer, GColorClear);
   text_layer_set_text_alignment(&time_layer, GTextAlignmentCenter);
-  
-  
-  text_layer_set_font(&hour_layer, fonts_get_system_font(FONT_KEY_ROBOTO_CONDENSED_21));
-  text_layer_set_font(&minute_layer, fonts_get_system_font(FONT_KEY_ROBOTO_CONDENSED_21));  
   text_layer_set_font(&time_layer, fonts_get_system_font(FONT_KEY_ROBOTO_CONDENSED_21));
   
   layer_add_child(&window.layer, &time_layer.layer);
   layer_add_child(&window.layer, &hour_layer.layer);
+  layer_add_child(&window.layer, &text_layer.layer);
   layer_add_child(&window.layer, &minute_layer.layer);
   
 
