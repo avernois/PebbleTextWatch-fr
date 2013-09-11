@@ -11,9 +11,8 @@ PBL_APP_INFO(MY_UUID,
              APP_INFO_WATCH_FACE);
 
 Window window;
-TextLayer hour_layer;
-TextLayer text_layer;
-TextLayer minute_layer;
+
+TextLayer layers[3];
 
 PblTm t;
 
@@ -45,12 +44,12 @@ static const char* const MINUTES[] = {
 
 void display_time(PblTm *t)
 { 
-  text_layer_set_text(&hour_layer, HOURS[t->tm_hour % 12]);
-  text_layer_set_text(&minute_layer, MINUTES[t->tm_min]);
+  text_layer_set_text(&layers[0], HOURS[t->tm_hour % 12]);
+  text_layer_set_text(&layers[2], MINUTES[t->tm_min]);
   if(t->tm_hour > 1) {
-    text_layer_set_text(&text_layer, "heures");
+    text_layer_set_text(&layers[1], "heures");
   } else {
-    text_layer_set_text(&text_layer, "heure");
+    text_layer_set_text(&layers[1], "heure");
   }
 }
 
@@ -68,12 +67,12 @@ void handle_init(AppContextRef ctx) {
   window_stack_push(&window, true /* Animated */);
   window_set_background_color(&window, GColorBlack);
 
-  init_layer(&hour_layer, 0);
-  layer_add_child(&window.layer, &hour_layer.layer);
-  init_layer(&text_layer, 1);
-  layer_add_child(&window.layer, &text_layer.layer);
-  init_layer(&minute_layer, 2);
-  layer_add_child(&window.layer, &minute_layer.layer);
+  init_layer(&layers[0], 0);
+  layer_add_child(&window.layer, &layers[0].layer);
+  init_layer(&layers[1], 1);
+  layer_add_child(&window.layer, &layers[1].layer);
+  init_layer(&layers[2], 2);
+  layer_add_child(&window.layer, &layers[2].layer);
   
 
   get_time(&t);
