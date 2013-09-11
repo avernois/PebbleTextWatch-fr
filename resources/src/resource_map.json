@@ -1,11 +1,11 @@
 
-{"friendlyVersion": "VERSION",
- "versionDefName": "VERSION",
+{"friendlyVersion": "0.1",
+ "versionDefName": "RESOURCES_TEXTWATCH_FR",
  "media": [
 	   {
-	    "type":"raw",
-	    "defName":"DUMMY",
-	    "file":"resource_map.json"
+	    "type":"font",
+	    "defName":"FONT_OPEN_SANS_CONDENSED_BOLD_30",
+	    "file":"fonts/OpenSans-CondBold_30.ttf"
 	   }
 	  ]
 }

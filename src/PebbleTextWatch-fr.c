@@ -3,6 +3,8 @@
 #include "pebble_fonts.h"
 #include "time_constant-fr.h"
 
+#include "resource_ids.auto.h"
+
 #define MY_UUID { 0xFF, 0x9E, 0x5C, 0xAC, 0xBA, 0x01, 0x4A, 0xE5, 0x85, 0x4D, 0xA9, 0x86, 0x16, 0xCE, 0x02, 0xED }
 PBL_APP_INFO(MY_UUID,
              "Simple Text Watch in french", "Crafting Labs",
@@ -15,6 +17,8 @@ PBL_APP_INFO(MY_UUID,
 
 Window window;
 TextLayer layers[NUMBER_OF_LAYER];
+GFont font;
+
 
 PblTm t;
 char time_text[NUMBER_OF_LAYER][MAX_CHAR_PER_LINE];
@@ -43,7 +47,9 @@ void time_as_time_text(PblTm *t, char text[NUMBER_OF_LAYER][MAX_CHAR_PER_LINE]) 
   } else {
     strcpy(text[current_line + 1], "heure");
   }
-  current_line = fill_lines(MINUTES[t->tm_min], text, current_line + 2);  
+  
+  current_line = fill_lines(MINUTES[t->tm_min], text, current_line + 2);
+
 }
 
 void display_time(PblTm *t)
@@ -60,11 +66,11 @@ void display_time(PblTm *t)
 }
 
 void init_layer(TextLayer *layer, int position) {
-  text_layer_init(layer, GRect(0, 25 * position, 144, 25));
+  text_layer_init(layer, GRect(0, 33 * position, 144, 33));
   text_layer_set_text_color(layer, GColorWhite);
   text_layer_set_background_color(layer, GColorClear);
   text_layer_set_text_alignment(layer, GTextAlignmentLeft);
-  text_layer_set_font(layer, fonts_get_system_font(FONT_KEY_ROBOTO_CONDENSED_21));
+  text_layer_set_font(layer, font);
   layer_add_child(&window.layer, &layer->layer);
 }
 
@@ -73,6 +79,10 @@ void handle_init(AppContextRef ctx) {
   window_init(&window, "Window Name");
   window_stack_push(&window, true /* Animated */);
   window_set_background_color(&window, GColorBlack);
+
+  resource_init_current_app(&RESOURCES_TEXTWATCH_FR);
+  font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_OPEN_SANS_CONDENSED_BOLD_30));
+
 
   for(int i=0; i< NUMBER_OF_LAYER; i++) {
     init_layer(&layers[i], i);
