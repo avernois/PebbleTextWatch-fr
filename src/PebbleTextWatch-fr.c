@@ -14,6 +14,8 @@ PBL_APP_INFO(MY_UUID,
 
 #define NUMBER_OF_LAYER 5
 #define MAX_CHAR_PER_LINE 12
+#define LAYER_HEIGHT 168/NUMBER_OF_LAYER
+#define VERTICAL_SHIFT (168 - NUMBER_OF_LAYER*LAYER_HEIGHT)/2
 
 Window window;
 TextLayer layers[NUMBER_OF_LAYER];
@@ -52,7 +54,6 @@ void time_as_time_text(PblTm *t, char text[NUMBER_OF_LAYER][MAX_CHAR_PER_LINE]) 
   }
   
   current_line = fill_lines(MINUTES[t->tm_min], text, current_line + 2);
-
 }
 
 void display_time(PblTm *t)
@@ -69,7 +70,7 @@ void display_time(PblTm *t)
 }
 
 void init_layer(TextLayer *layer, int position) {
-  text_layer_init(layer, GRect(0, 33 * position, 144, 33));
+  text_layer_init(layer, GRect(0, LAYER_HEIGHT * position + VERTICAL_SHIFT, 144, LAYER_HEIGHT));
   text_layer_set_text_color(layer, GColorWhite);
   text_layer_set_background_color(layer, GColorClear);
   text_layer_set_text_alignment(layer, GTextAlignmentLeft);
