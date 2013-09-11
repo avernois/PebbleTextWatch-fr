@@ -15,6 +15,15 @@ Window window;
 
 TextLayer layers[NUMBER_OF_LAYER];
 
+typedef struct {
+  char hour[20];
+  char minutes[20];
+  char text[20];
+} TimeText;
+
+
+TimeText time_text;
+
 PblTm t;
 
 static const char* const HOURS[] = {
@@ -42,15 +51,25 @@ static const char* const MINUTES[] = {
   "cinquante", "cinquante-et-une", "cinquante-deux", "cinquante-trois", "cinquante-quatre", "cinquante-cinq", "cinquante-six", "cinquante-sept", "cinquante-huit", "cinquante-neuf"
 };
 
+
+void time_as_time_text(PblTm *t, TimeText *text) {
+  strcpy(text->hour, HOURS[t->tm_hour % 12]);
+  strcpy(text->minutes, MINUTES[t->tm_min]);
+
+  if(t->tm_hour > 1) {
+    strcpy(text->text, "heures");
+  } else {
+    strcpy(text->text, "heure");
+  }
+}
+
 void display_time(PblTm *t)
 { 
-  text_layer_set_text(&layers[0], HOURS[t->tm_hour % 12]);
-  text_layer_set_text(&layers[2], MINUTES[t->tm_min]);
-  if(t->tm_hour > 1) {
-    text_layer_set_text(&layers[1], "heures");
-  } else {
-    text_layer_set_text(&layers[1], "heure");
-  }
+  time_as_time_text(t, &time_text);
+
+  text_layer_set_text(&layers[0], time_text.hour);
+  text_layer_set_text(&layers[1], time_text.text);
+  text_layer_set_text(&layers[2], time_text.minutes);
 }
 
 void init_layer(TextLayer *layer, int position) {
