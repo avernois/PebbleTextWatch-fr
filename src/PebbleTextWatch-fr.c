@@ -10,9 +10,10 @@ PBL_APP_INFO(MY_UUID,
              DEFAULT_MENU_ICON,
              APP_INFO_WATCH_FACE);
 
+#define NUMBER_OF_LAYER 3
 Window window;
 
-TextLayer layers[3];
+TextLayer layers[NUMBER_OF_LAYER];
 
 PblTm t;
 
@@ -67,9 +68,9 @@ void handle_init(AppContextRef ctx) {
   window_stack_push(&window, true /* Animated */);
   window_set_background_color(&window, GColorBlack);
 
-  init_layer(&layers[0], 0);
-  init_layer(&layers[1], 1);
-  init_layer(&layers[2], 2);
+  for(int i=0; i< NUMBER_OF_LAYER; i++) {
+    init_layer(&layers[i], i);
+  }
 
   get_time(&t);
   display_time(&t);
