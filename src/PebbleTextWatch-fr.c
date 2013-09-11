@@ -16,7 +16,6 @@ TextLayer layers[3];
 
 PblTm t;
 
-
 static const char* const HOURS[] = {
   "minuit",
   "un",
@@ -59,6 +58,7 @@ void init_layer(TextLayer *layer, int position) {
   text_layer_set_background_color(layer, GColorClear);
   text_layer_set_text_alignment(layer, GTextAlignmentLeft);
   text_layer_set_font(layer, fonts_get_system_font(FONT_KEY_ROBOTO_CONDENSED_21));
+  layer_add_child(&window.layer, &layer->layer);
 }
 
 void handle_init(AppContextRef ctx) {
@@ -68,12 +68,8 @@ void handle_init(AppContextRef ctx) {
   window_set_background_color(&window, GColorBlack);
 
   init_layer(&layers[0], 0);
-  layer_add_child(&window.layer, &layers[0].layer);
   init_layer(&layers[1], 1);
-  layer_add_child(&window.layer, &layers[1].layer);
   init_layer(&layers[2], 2);
-  layer_add_child(&window.layer, &layers[2].layer);
-  
 
   get_time(&t);
   display_time(&t);
