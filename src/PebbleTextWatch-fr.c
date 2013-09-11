@@ -11,20 +11,12 @@ PBL_APP_INFO(MY_UUID,
              APP_INFO_WATCH_FACE);
 
 #define NUMBER_OF_LAYER 3
-Window window;
 
+Window window;
 TextLayer layers[NUMBER_OF_LAYER];
 
-typedef struct {
-  char hour[20];
-  char minutes[20];
-  char text[20];
-} TimeText;
-
-
-TimeText time_text;
-
 PblTm t;
+char time_text[NUMBER_OF_LAYER][20];
 
 static const char* const HOURS[] = {
   "minuit",
@@ -52,24 +44,24 @@ static const char* const MINUTES[] = {
 };
 
 
-void time_as_time_text(PblTm *t, TimeText *text) {
-  strcpy(text->hour, HOURS[t->tm_hour % 12]);
-  strcpy(text->minutes, MINUTES[t->tm_min]);
+void time_as_time_text(PblTm *t, char text[NUMBER_OF_LAYER][20]) {
+  strcpy(text[0], HOURS[t->tm_hour % 12]);
+  strcpy(text[2], MINUTES[t->tm_min]);
 
   if(t->tm_hour > 1) {
-    strcpy(text->text, "heures");
+    strcpy(text[1], "heures");
   } else {
-    strcpy(text->text, "heure");
+    strcpy(text[1], "heure");
   }
 }
 
 void display_time(PblTm *t)
 { 
-  time_as_time_text(t, &time_text);
+  time_as_time_text(t, time_text);
 
-  text_layer_set_text(&layers[0], time_text.hour);
-  text_layer_set_text(&layers[1], time_text.text);
-  text_layer_set_text(&layers[2], time_text.minutes);
+  text_layer_set_text(&layers[0], time_text[0]);
+  text_layer_set_text(&layers[1], time_text[1]);
+  text_layer_set_text(&layers[2], time_text[2]);
 }
 
 void init_layer(TextLayer *layer, int position) {
