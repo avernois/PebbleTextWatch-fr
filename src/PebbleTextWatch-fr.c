@@ -11,7 +11,6 @@ PBL_APP_INFO(MY_UUID,
              APP_INFO_WATCH_FACE);
 
 Window window;
-TextLayer time_layer;
 TextLayer hour_layer;
 TextLayer text_layer;
 TextLayer minute_layer;
@@ -46,10 +45,6 @@ static const char* const MINUTES[] = {
 
 void display_time(PblTm *t)
 { 
-  // Need to be static because they're used by the system later.
-  static char time_text[6] = "00:00";
-  string_format_time(time_text, sizeof(time_text), "%R", t);
-  text_layer_set_text(&time_layer, time_text);
   text_layer_set_text(&hour_layer, HOURS[t->tm_hour % 12]);
   text_layer_set_text(&minute_layer, MINUTES[t->tm_min]);
   if(t->tm_hour > 1) {
@@ -79,16 +74,6 @@ void handle_init(AppContextRef ctx) {
   layer_add_child(&window.layer, &text_layer.layer);
   init_layer(&minute_layer, 2);
   layer_add_child(&window.layer, &minute_layer.layer);
-
-
-
-  text_layer_init(&time_layer, GRect(0, 125, 144, 30));
-  text_layer_set_text_color(&time_layer, GColorWhite);
-  text_layer_set_background_color(&time_layer, GColorClear);
-  text_layer_set_text_alignment(&time_layer, GTextAlignmentCenter);
-  text_layer_set_font(&time_layer, fonts_get_system_font(FONT_KEY_ROBOTO_CONDENSED_21));
-  
-  layer_add_child(&window.layer, &time_layer.layer);
   
 
   get_time(&t);
