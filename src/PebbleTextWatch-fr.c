@@ -59,30 +59,27 @@ void display_time(PblTm *t)
   }
 }
 
+void init_layer(TextLayer *layer, int position) {
+  text_layer_init(layer, GRect(0, 25 * position, 144, 25));
+  text_layer_set_text_color(layer, GColorWhite);
+  text_layer_set_background_color(layer, GColorClear);
+  text_layer_set_text_alignment(layer, GTextAlignmentLeft);
+  text_layer_set_font(layer, fonts_get_system_font(FONT_KEY_ROBOTO_CONDENSED_21));
+}
+
 void handle_init(AppContextRef ctx) {
 
   window_init(&window, "Window Name");
   window_stack_push(&window, true /* Animated */);
   window_set_background_color(&window, GColorBlack);
 
-  text_layer_init(&hour_layer, GRect(0, 0, 144, 25));
-  text_layer_set_text_color(&hour_layer, GColorWhite);
-  text_layer_set_background_color(&hour_layer, GColorClear);
-  text_layer_set_text_alignment(&hour_layer, GTextAlignmentLeft);
-  text_layer_set_font(&hour_layer, fonts_get_system_font(FONT_KEY_ROBOTO_CONDENSED_21));
+  init_layer(&hour_layer, 0);
+  layer_add_child(&window.layer, &hour_layer.layer);
+  init_layer(&text_layer, 1);
+  layer_add_child(&window.layer, &text_layer.layer);
+  init_layer(&minute_layer, 2);
+  layer_add_child(&window.layer, &minute_layer.layer);
 
-  text_layer_init(&text_layer, GRect(0, 25, 144, 25));
-  text_layer_set_text_color(&text_layer, GColorWhite);
-  text_layer_set_background_color(&text_layer, GColorClear);
-  text_layer_set_text_alignment(&text_layer, GTextAlignmentLeft);
-  text_layer_set_font(&text_layer, fonts_get_system_font(FONT_KEY_ROBOTO_CONDENSED_21));
-  
-
-  text_layer_init(&minute_layer, GRect(0, 50, 144, 50));
-  text_layer_set_text_color(&minute_layer, GColorWhite);
-  text_layer_set_background_color(&minute_layer, GColorClear);
-  text_layer_set_text_alignment(&minute_layer, GTextAlignmentLeft);
-  text_layer_set_font(&minute_layer, fonts_get_system_font(FONT_KEY_ROBOTO_CONDENSED_21));
 
 
   text_layer_init(&time_layer, GRect(0, 125, 144, 30));
@@ -92,9 +89,6 @@ void handle_init(AppContextRef ctx) {
   text_layer_set_font(&time_layer, fonts_get_system_font(FONT_KEY_ROBOTO_CONDENSED_21));
   
   layer_add_child(&window.layer, &time_layer.layer);
-  layer_add_child(&window.layer, &hour_layer.layer);
-  layer_add_child(&window.layer, &text_layer.layer);
-  layer_add_child(&window.layer, &minute_layer.layer);
   
 
   get_time(&t);
