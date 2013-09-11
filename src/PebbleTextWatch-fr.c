@@ -19,19 +19,9 @@ PblTm t;
 char time_text[NUMBER_OF_LAYER][20];
 
 static const char* const HOURS[] = {
-  "minuit",
-  "un",
-  "deux",
-  "trois",
-  "quatre",
-  "cinq",
-  "six",
-  "sept",
-  "huit",
-  "neuf",
-  "dix",
-  "onze",
-  "midi"
+  "zéro",          "un",              "deux",           "trois",           "quatre",           "cinq",           "six",           "sept",           "huit",           "neuf",
+  "dix",       "onze",            "douze",          "treize",          "quatorze",         "quinze",         "seize",         "dix-sept",       "dix-huit",       "dix-neuf",
+  "vingt",     "vingt-et-une",     "vingt-deux",     "vingt-trois"
 };
 
 static const char* const MINUTES[] = {
@@ -44,8 +34,8 @@ static const char* const MINUTES[] = {
 };
 
 
-void time_as_time_text(PblTm *t, char text[NUMBER_OF_LAYER][20]) {
-  strcpy(text[0], HOURS[t->tm_hour % 12]);
+void time_as_time_text(PblTm *t, char text[NUMBER_OF_LAYER][20]) {  
+  strcpy(text[0], HOURS[t->tm_hour]);
   strcpy(text[2], MINUTES[t->tm_min]);
 
   if(t->tm_hour > 1) {
