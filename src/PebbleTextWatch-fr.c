@@ -13,7 +13,7 @@ PBL_APP_INFO(MY_UUID,
              APP_INFO_WATCH_FACE);
 
 #define NUMBER_OF_LAYER 5
-#define MAX_CHAR_PER_LINE 10
+#define MAX_CHAR_PER_LINE 12
 
 Window window;
 TextLayer layers[NUMBER_OF_LAYER];
@@ -24,16 +24,19 @@ PblTm t;
 char time_text[NUMBER_OF_LAYER][MAX_CHAR_PER_LINE];
 
 int fill_lines(const char * line, char text[NUMBER_OF_LAYER][MAX_CHAR_PER_LINE], int start_position) {
-  const char * search = line;
-  char * pch = strstr (search, "-");
 
-  if (pch!=NULL) {
-    strncpy(text[start_position], search, pch - search);
-    start_position++;
-    search += pch - search + 1;
+  if (strlen(line) < MAX_CHAR_PER_LINE) {
+    strcpy(text[start_position], line);
+  } else {
+    const char * search = line;
+    char * pch = strstr (search, "-");
+    if (pch!=NULL) {
+      strncpy(text[start_position], search, pch - search);
+      start_position++;
+      search += pch - search + 1;
+    }
+    strcpy(text[start_position], search);
   }
-  strcpy(text[start_position], search);
-
   return start_position;
 }
 
