@@ -1,7 +1,7 @@
 #include "pebble_os.h"
 #include "pebble_app.h"
 #include "pebble_fonts.h"
-
+#include "time_constant-fr.h"
 
 #define MY_UUID { 0xFF, 0x9E, 0x5C, 0xAC, 0xBA, 0x01, 0x4A, 0xE5, 0x85, 0x4D, 0xA9, 0x86, 0x16, 0xCE, 0x02, 0xED }
 PBL_APP_INFO(MY_UUID,
@@ -18,22 +18,6 @@ TextLayer layers[NUMBER_OF_LAYER];
 
 PblTm t;
 char time_text[NUMBER_OF_LAYER][MAX_CHAR_PER_LINE];
-
-static const char* const HOURS[] = {
-  "zéro",  "une",          "deux",       "trois",      "quatre",   "cinq",   "six",   "sept",     "huit",     "neuf",
-  "dix",   "onze",         "douze",      "treize",     "quatorze", "quinze", "seize", "dix-sept", "dix-huit", "dix-neuf",
-  "vingt", "vingt-et-une", "vingt-deux", "vingt-trois"
-};
-
-static const char* const MINUTES[] = {
-  "",          "un",               "deux",           "trois",           "quatre",           "cinq",           "six",           "sept",           "huit",           "neuf",
-  "dix",       "onze",             "douze",          "treize",          "quatorze",         "quinze",         "seize",         "dix-sept",       "dix-huit",       "dix-neuf",
-  "vingt",     "vingt-et-une",     "vingt-deux",     "vingt-trois",     "vingt-quatre",     "vingt-cinq",     "vingt-six",     "vingt-sept",     "vingt-huit",     "vingt-neuf",
-  "trente",    "trente-et-une",    "trente-deux",    "trente-trois",    "trente-quatre",    "trente-cinq",    "trente-six",    "trente-sept",    "trente-huit",    "trente-neuf",
-  "quarante",  "quarante-et-une",  "quarante-deux",  "quarante-trois",  "quarante-quatre",  "quarante-cinq",  "quarante-six",  "quarante-sept",  "quarante-huit",  "quarante-neuf",
-  "cinquante", "cinquante-et-une", "cinquante-deux", "cinquante-trois", "cinquante-quatre", "cinquante-cinq", "cinquante-six", "cinquante-sept", "cinquante-huit", "cinquante-neuf"
-};
-
 
 int fill_lines(const char * line, char text[NUMBER_OF_LAYER][MAX_CHAR_PER_LINE], int start_position) {
   const char * search = line;
