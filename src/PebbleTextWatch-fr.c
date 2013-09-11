@@ -10,23 +10,24 @@ PBL_APP_INFO(MY_UUID,
              DEFAULT_MENU_ICON,
              APP_INFO_WATCH_FACE);
 
-#define NUMBER_OF_LAYER 3
+#define NUMBER_OF_LAYER 5
+#define MAX_CHAR_PER_LINE 10
 
 Window window;
 TextLayer layers[NUMBER_OF_LAYER];
 
 PblTm t;
-char time_text[NUMBER_OF_LAYER][20];
+char time_text[NUMBER_OF_LAYER][MAX_CHAR_PER_LINE];
 
 static const char* const HOURS[] = {
-  "zéro",          "un",              "deux",           "trois",           "quatre",           "cinq",           "six",           "sept",           "huit",           "neuf",
-  "dix",       "onze",            "douze",          "treize",          "quatorze",         "quinze",         "seize",         "dix-sept",       "dix-huit",       "dix-neuf",
-  "vingt",     "vingt-et-une",     "vingt-deux",     "vingt-trois"
+  "zéro",  "une",          "deux",       "trois",      "quatre",   "cinq",   "six",   "sept",     "huit",     "neuf",
+  "dix",   "onze",         "douze",      "treize",     "quatorze", "quinze", "seize", "dix-sept", "dix-huit", "dix-neuf",
+  "vingt", "vingt-et-une", "vingt-deux", "vingt-trois"
 };
 
 static const char* const MINUTES[] = {
-  "",          "un",              "deux",           "trois",           "quatre",           "cinq",           "six",           "sept",           "huit",           "neuf",
-  "dix",       "onze",            "douze",          "treize",          "quatorze",         "quinze",         "seize",         "dix-sept",       "dix-huit",       "dix-neuf",
+  "",          "un",               "deux",           "trois",           "quatre",           "cinq",           "six",           "sept",           "huit",           "neuf",
+  "dix",       "onze",             "douze",          "treize",          "quatorze",         "quinze",         "seize",         "dix-sept",       "dix-huit",       "dix-neuf",
   "vingt",     "vingt-et-une",     "vingt-deux",     "vingt-trois",     "vingt-quatre",     "vingt-cinq",     "vingt-six",     "vingt-sept",     "vingt-huit",     "vingt-neuf",
   "trente",    "trente-et-une",    "trente-deux",    "trente-trois",    "trente-quatre",    "trente-cinq",    "trente-six",    "trente-sept",    "trente-huit",    "trente-neuf",
   "quarante",  "quarante-et-une",  "quarante-deux",  "quarante-trois",  "quarante-quatre",  "quarante-cinq",  "quarante-six",  "quarante-sept",  "quarante-huit",  "quarante-neuf",
@@ -34,24 +35,44 @@ static const char* const MINUTES[] = {
 };
 
 
-void time_as_time_text(PblTm *t, char text[NUMBER_OF_LAYER][20]) {  
-  strcpy(text[0], HOURS[t->tm_hour]);
-  strcpy(text[2], MINUTES[t->tm_min]);
+int fill_lines(const char * line, char text[NUMBER_OF_LAYER][MAX_CHAR_PER_LINE], int start_position) {
+  const char * search = line;
+  char * pch = strstr (search, "-");
+
+  if (pch!=NULL) {
+    strncpy(text[start_position], search, pch - search);
+    start_position++;
+    search += pch - search + 1;
+  }
+  strcpy(text[start_position], search);
+
+  return start_position;
+}
+
+void time_as_time_text(PblTm *t, char text[NUMBER_OF_LAYER][MAX_CHAR_PER_LINE]) {
+
+  int current_line = 0;
+  current_line = fill_lines(HOURS[t->tm_hour], text, current_line);
 
   if(t->tm_hour > 1) {
-    strcpy(text[1], "heures");
+    strcpy(text[current_line + 1], "heures");
   } else {
-    strcpy(text[1], "heure");
+    strcpy(text[current_line + 1], "heure");
   }
+  current_line = fill_lines(MINUTES[t->tm_min], text, current_line + 2);  
 }
 
 void display_time(PblTm *t)
-{ 
+{
+  for(int i=0; i < NUMBER_OF_LAYER; i++) {
+    memset(time_text[i], 0, MAX_CHAR_PER_LINE); 
+  }  
+
   time_as_time_text(t, time_text);
 
-  text_layer_set_text(&layers[0], time_text[0]);
-  text_layer_set_text(&layers[1], time_text[1]);
-  text_layer_set_text(&layers[2], time_text[2]);
+  for(int i=0; i < NUMBER_OF_LAYER; i++) {
+    text_layer_set_text(&layers[i], time_text[i]); 
+  }
 }
 
 void init_layer(TextLayer *layer, int position) {
