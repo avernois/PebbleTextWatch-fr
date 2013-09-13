@@ -1,7 +1,7 @@
 PebbleTextWatch-fr
 ==================
 
-This is a simple watchface that tell hours in french.
+This is a simple watchface for the [Pebble Watch](http://getpebble.com) that tell hours in french.
 
 ## Get the package
 Just download the latest build from https://github.com/avernois/PebbleTextWatch-fr/releases
