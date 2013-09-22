@@ -12,6 +12,3 @@ The used font is [Open Sans Condensed Bold](http://www.google.com/fonts/specimen
 
 ## Compile
 This project use the [Pebble SDK and building tools](https://account.getpebble.com/sdk_releases). So pull the source and follow steps of "Compiling Peble examples" of [http://developer.getpebble.com/1/GettingStarted/UsingExamples/].
-
-## Known issues
-* bottom of g, p and q characters is missing few pixel line (probably cause by a wrong alignement or not tall enough layer).
