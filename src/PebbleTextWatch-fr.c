@@ -75,6 +75,7 @@ void init_layer(TextLayer *layer, int position) {
   text_layer_set_background_color(layer, GColorClear);
   text_layer_set_text_alignment(layer, GTextAlignmentLeft);
   text_layer_set_font(layer, font);
+  layer_set_clips((Layer *) layer, false);
   layer_add_child(&window.layer, &layer->layer);
 }
 
