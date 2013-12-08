@@ -1,10 +1,4 @@
-.waf*
+
+# Ignore build generated files
 build
-include
-lib
-tools
-resources/wscript
-.lock*
-pebble_app.ld
-waf
-wscript
+.lock-waf*

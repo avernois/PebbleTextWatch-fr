@@ -1,0 +1,21 @@
+{
+  "uuid": "ff9e5cac-ba01-4ae5-854d-a98616ce02ed",
+  "shortName": "TextWatch-fr",
+  "longName": "Simple Text Watch in french",
+  "companyName": "Crafting Labs",
+  "versionCode": 1,
+  "versionLabel": "1.0.0",
+  "watchapp": {
+    "watchface": true
+  },
+  "appKeys": {},
+  "resources": {
+    "media": [
+      {
+        "type": "font",
+        "name": "FONT_OPEN_SANS_CONDENSED_BOLD_30",
+        "file": "fonts/OpenSans-CondBold_30.ttf"
+      }
+    ]
+  }
+}
